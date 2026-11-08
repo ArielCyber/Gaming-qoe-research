@@ -1,0 +1,34 @@
+# --- סביבות וירטואליות ---
+venv_win/
+venv/
+ENV/
+env/
+
+# --- קבצי פייתון זמניים ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Jupyter Notebook ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- תוצרי ריצה (Products) ---
+# הסקריפטים שלך מייצרים תיקיות Products_P++300 וכו'
+Products_*/
+*.csv
+*.xlsx
+*.log
+
+# --- קבצי מערכת הפעלה ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- מידע גולמי כבד (אופציונלי) ---
+# אם אתה שם את קבצי ה-PCAP או התמונות בתוך התיקייה
+*.pcap
+*.pcapng
+*.png
+*.jpg
+*.jpeg

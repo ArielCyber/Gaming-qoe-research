@@ -1,0 +1,17 @@
+pandas
+numpy
+matplotlib
+seaborn
+nfstream
+openpyxl
+scikit-learn
+xlsxwriter
+ipykernel
+xgboost
+catboost
+lightgbm
+opencv-python
+tensorflow
+WMI
+scapy
+joblib

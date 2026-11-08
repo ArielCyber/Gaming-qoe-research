@@ -1,0 +1,28 @@
+Gaming QoE Paper Reproduction - Environment Info
+==================================================
+
+Timestamp: 2025-09-02T16:24:16.539570
+Random State: 42
+Python: 3.11.13 (main, Aug 11 2025, 09:41:40) [GCC 13.3.0]
+Platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+
+Library Versions:
+  pandas: 2.2.3
+  numpy: 1.26.4
+  scikit-learn: 1.7.1
+  matplotlib: 3.10.1
+  xgboost: 3.0.4
+
+Configuration:
+  n_classes: 3
+  target_column: y_qoe_by_ping
+  test_size: 0.2
+  stratify: True
+  window_sizes: [3, 5, 10, 15]
+  n_features: 30
+
+Data Info:
+  main_dataset: output/window_10_1754904064.csv
+  n_samples: 32165
+  n_train: 23742
+  n_test: 8423

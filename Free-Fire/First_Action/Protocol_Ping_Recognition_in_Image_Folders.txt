@@ -1,0 +1,183 @@
+---
+
+# 📄 Protocol: Ping Recognition and Dataset Annotation
+
+This document outlines the systematic workflow for processing raw telemetry and network captures into a structured dataset for Quality of Experience (QoE) analysis.
+
+### Step 1: Virtual Environment Activation (`venv_win`)
+
+Before executing any script, you must activate the virtual environment to ensure all dependencies (such as **TensorFlow** for neural network-based recognition) are initialized.
+
+**Execution Command:**
+
+```cmd
+cd "C:\Users\<user>\Desktop\Ping_E\First_Action"
+..\venv_win\Scripts\activate
+
+```
+
+---
+
+### Step 2: PCAP Integrity Verification
+
+This stage ensures that each of the 100 session directories contains a corresponding network traffic capture file.
+
+* **Script:** `Find_Missing_Pcaps_gm.py`
+* **Path Configuration:** Update the `SOURCE_PATH` variable to point to the parent directory containing the 100 game sessions.
+* **Execution:**
+
+```cmd
+python Find_Missing_Pcaps_gm.py
+
+```
+
+---
+
+### Step 3: Automated Recognition Pipeline (The Engine)
+
+This step orchestrates the **SuperHybrid** engine (averaging 95%–97% accuracy) to perform batch renaming of image files based on detected ping values.
+
+* **Script:** `rename_manager_V2_gm.py`
+* **Path Configuration:** Update the `SOURCE_PATH` variable to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python rename_manager_V2_gm.py
+
+```
+
+---
+
+### Step 4: Post-Processing Quality Assessment
+
+A diagnostic scan to generate a report on recognition failures (where the AI returned `None` or `Not_Found`).
+
+* **Script:** `quality_check_V3_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python quality_check_V3_gm.py
+
+```
+
+---
+
+### Step 5: Manual Validation of Logical Outliers
+
+Launches a Graphical User Interface (GUI) to manually correct ping values detected outside of the logically defined thresholds (X to Y).
+
+* **Script:** `Ping_Verifier_V1.2_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python Ping_Verifier_V1.2_gm.py
+
+```
+
+---
+
+### Step 6: Manual Annotation of Null Values (`None`)
+
+Specifically targets frames where the automated engine failed to identify any numerical value, allowing for manual entry.
+
+* **Script:** `Ping_Verifier_None_V1_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python Ping_Verifier_None_V1_gm.py
+
+```
+
+---
+
+### Step 7: Training Data Aggregation (Error Collection)
+
+Aggregates all misidentified or unrecognized images into a dedicated repository. This data is critical for future model retraining and fine-tuning.
+
+* **Script:** `Error_Image_Collector_V1_gm.py`
+* **Path Configuration:** 1. Update `SOURCE_PATH` (Source sessions).
+2. Update `TARGET_BASE_PATH` (Destination for error logs).
+* **Execution:**
+
+```cmd
+python Error_Image_Collector_V1_gm.py
+
+```
+
+---
+
+### Step 8: Directory Metadata Cleanup
+
+Once all files within a session are successfully tagged with their respective ping values, this utility removes the "V_" status prefix from the directory names.
+
+* **Script:** `prefix_remover_V1_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python prefix_remover_V1_gm.py
+
+```
+
+---
+
+### Step 9: Temporal PCAP Truncation
+
+To optimize storage and analysis, this script prunes PCAP files to match the duration of the visual recording (up to the timestamp of the final frame plus a 2-second buffer).
+
+* **Script:** `Cut_pcap_V5_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python Cut_pcap_V5_gm.py
+
+```
+
+---
+
+### Step 10: Continuity Preservation (Frame Interpolation)
+
+Identifies temporal gaps in the image sequence (missing or deleted frames) and inserts white placeholder frames with corresponding filenames to maintain dataset continuity.
+
+* **Script:** `fill_missing_frames_v2_gm.py`
+* **Path Configuration:** Update `SOURCE_PATH` to the sessions' parent directory.
+* **Execution:**
+
+```cmd
+python fill_missing_frames_v2_gm.py
+
+```
+
+---
+
+### Step 11: Final Metadata Consolidation
+
+The final stage of the First_Action workflow. Consolidates all validated results from individual sessions into a master CSV file for downstream analysis in Jupyter Notebooks.
+
+* **Script:** `Metadata_Creator_V3.1_gm.py`
+* **Path Configuration:** 1. Update `SOURCE_PATH` to the sessions' parent directory.
+2. Set the output destination, e.g.: `r"C:\project_ping\ping_extractor\P+0_metadata_results.csv"`.
+* **Execution:**
+
+```cmd
+python Metadata_Creator_V3.1_gm.py
+
+```
+
+---
+
+### Workflow Summary: Input/Output Matrix
+
+| Stage | Component | Primary Input | Primary Output |
+| --- | --- | --- | --- |
+| **Verification** | `Find_Missing_Pcaps` | Session Directory (100 Games) | Missing Capture Report |
+| **Recognition** | `rename_manager` | Raw Image Sequence | `ping_results.csv` per session |
+| **Assessment** | `quality_check` | Generated CSV Files | Success/Failure Metrics Report |
+| **Correction** | `Ping_Verifier` | Logical Outliers & Null Values | Validated CSVs (100% Accuracy) |
+| **Consolidation** | `Metadata_Creator` | All Validated Session Data | Master `metadata_results.csv` |
+
+---
